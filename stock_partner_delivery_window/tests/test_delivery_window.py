@@ -183,3 +183,16 @@ class TestPartnerDeliveryWindow(BaseCommon):
         self.assertEqual(len(copied_partner.delivery_time_window_ids), expecting)
         copied_partner = self.customer_working_days.copy()
         self.assertFalse(copied_partner.delivery_time_window_ids)
+
+    def test_weekdays_anytime(self):
+        self.assertEqual(
+            self.customer_anytime.delivery_time_weekdays, {0, 1, 2, 3, 4, 5, 6}
+        )
+
+    def test_weekdays_working_days(self):
+        self.assertEqual(
+            self.customer_working_days.delivery_time_weekdays, {0, 1, 2, 3, 4}
+        )
+
+    def test_weekdays_time_window(self):
+        self.assertEqual(self.customer_time_window.delivery_time_weekdays, {3, 5})

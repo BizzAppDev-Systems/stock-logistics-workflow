@@ -70,6 +70,24 @@ class ResPartner(models.Model):
             res[window.partner_id.id] |= window
         return res
 
+    @property
+    def delivery_time_weekdays(self):
+        self.ensure_one()
+        if self.delivery_time_preference == "anytime":
+            weekdays = set(range(7))
+        elif self.delivery_time_preference == "workdays":
+            weekdays = set(range(5))
+        else:
+            weekdays = set(
+                map(
+                    int,
+                    self.delivery_time_window_ids.time_window_weekday_ids.mapped(
+                        "name"
+                    ),
+                )
+            )
+        return weekdays
+
     def is_in_delivery_window(self, date_time):
         """
         Checks if provided date_time is in a delivery window for actual partner
